@@ -1,29 +1,35 @@
-html {
-    background-color: #ccc;
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+span {
+  font-size: smaller;
+  color: grey;
 }
 
-main {
-    margin: 8px auto;
-    width: 900px;
-    background-color: #eee;
-    padding: 1em;
-    border: 1px solid #999;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px 5px #999;
+#canvasContainer {
+  width: 100%;
+  text-align:center;
 }
 
-footer {
-    padding-top: 1em;
-    text-align: center;
+#canvas {
+  display: inline;
 }
 
-.canvas {
-    display: block;
-    margin: 20px auto;
-    border: 1px solid #999;
-    background-color: #fff;
+#info, #infobutton {
+  z-index: 1;
+  display: inline;
+  position: relative;
 }
 
-input[type="number"] {
-    width: 4em;
+#infobutton {
+  margin: 10px 0px 0px 5px;
+  background: transparent;
+}
+
+#info {
+  width: 25%;
+  height: 20%;
+  border: white 2px solid;
+  background: rgba(253, 249, 249, 0.19);
 }
