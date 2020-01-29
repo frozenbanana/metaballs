@@ -66,7 +66,8 @@ function init() {
     uniform float uTime;
     uniform float uBlobFactor;
     //vec3 blobs[MAX_NUM_BLOBS]; // for matrix multiplication
-    const int MAX_NUM_BLOBS = 50;
+    const int MAX_NUM_BLOBS = 20;
+    float[MAX_NUM_BLOBS] sds;
 
     float sdSphere(vec3 ray, vec3 sp, float r) {
       return length(ray-sp) - r;
@@ -114,7 +115,7 @@ function init() {
         d = min(d, 3.4 - ray.x);
         
         // Blobs
-        float blobs = blob7(ray); // Constant number of blobs, 7
+        //float blobs = blob7(ray); // Constant number of blobs, 7
         
         //////// PARAMATERIZED BLOB FUNCTION //////////////
         //////// Crashing except when MAX_NUM_BLOBS = 2 ////
@@ -126,7 +127,7 @@ function init() {
         float blobs = blobN(sds);*/
 
         
-        /*
+        
         //////// This works. //////////////////////////////
         sds[0] = sdSphere(ray, vec3(sin(-0.2*t),  .5+sin(0.2*t),4.0+cos(0.2*t)), 0.1);
         sds[1] = sdSphere(ray, vec3(cos(-0.4*t), .5+sin(0.1*t),4.0-cos(0.3*t)), 0.2);
@@ -135,8 +136,21 @@ function init() {
         sds[4] = sdSphere(ray, vec3(cos(0.5*t),  .5+sin(0.2*t),4.0+cos(0.3*t)), 0.1);
         sds[5] = sdSphere(ray, vec3(cos(-0.2*t), .5+sin(0.1*t),4.0-cos(0.2*t)), 0.2);
         sds[6] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(0.4*t)), 0.3);
-          
-        float blobs = blobN(sds);*/
+        sds[7] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(0.4*t)), 0.3);
+        sds[8] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(0.4*t)), 0.3);
+        sds[9] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(0.4*t)), 0.2);
+        sds[10] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(0.4*t)), 0.1);
+        sds[11] = sdSphere(ray, vec3(cos(-0.2*t),  .5+sin(0.8*t),4.0+cos(0.4*t)), 0.4);
+        sds[12] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(-0.8*t)), 0.2);
+        sds[13] = sdSphere(ray, vec3(cos(-0.6*t),  .5+sin(0.3*t),4.0+cos(0.4*t)), 0.3);
+        sds[14] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.1*t),4.0+cos(-0.6*t)), 0.1);
+        sds[15] = sdSphere(ray, vec3(cos(-0.3*t),  .5+sin(-0.2*t),4.0+cos(0.4*t)), 0.15);
+        sds[16] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.6*t),4.0+cos(-0.4*t)), 0.22);
+        sds[18] = sdSphere(ray, vec3(cos(-0.5*t),  .5+sin(0.2*t),4.0+cos(0.3*t)), 0.19);
+        sds[19] = sdSphere(ray, vec3(cos(0.2*t),  .5+sin(0.2*t),4.0+cos(-0.1*t)), 0.13);
+
+
+        float blobs = blobN(sds);
     
           
         d = min(d, blobs);
@@ -241,7 +255,7 @@ function init() {
     program: shaderProgram,
     buffers: buffers,
     blobFactor: 2.0,
-    numOfBlobs: 2,
+    numOfBlobs: 7,
     mouse: {
       x: 0,
       y: 0,
@@ -266,11 +280,13 @@ function init() {
 
   document.getElementById('inputBlobFactor').addEventListener('change', function (event) {
     programInfo.blobFactor = event.target.value;
+    document.getElementById('displayBlobFactor').innerText = "Blob Factor: " + event.target.value;
     programInfo.isChanged = true;
   }, false);
 
   document.getElementById('inputNumOfBlobs').addEventListener('change', function (event) {
     programInfo.numOfBlobs = parseInt(event.target.value);
+    document.getElementById('displayNumOfBlobs').innerText = "Number of blobs: " + parseInt(event.target.value);
     programInfo.isChanged = true;
   }, false);
 
@@ -432,7 +448,6 @@ function setupUniforms(gl, programInfo) {
     zNear,
     zFar);
 
-
   // ============= Uniforms ====================
   // Set resolution
   gl.uniform2fv(programInfo.uniformLocations.resolution,
@@ -447,7 +462,6 @@ function setupUniforms(gl, programInfo) {
   gl.uniform3fv(
     programInfo.uniformLocations.cameraTarget,
     cameraTarget);
-
 
   // Tell shader how many blobs to use out of the hard limit MAX_NUM_BLOBS
   console.log(programInfo.blobFactor);
